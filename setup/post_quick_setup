@@ -22,7 +22,7 @@ set_dnf_option() {
     local key="$1"
     local value="$2"
 
-    if $SUDO grep -q "^${key}=" "$DNF_CONF"; then
+    if grep -q "^${key}=" "$DNF_CONF"; then
         $SUDO sed -i "s/^${key}=.*/${key}=${value}/" "$DNF_CONF"
     else
         echo "${key}=${value}" | $SUDO tee -a "$DNF_CONF" >/dev/null
@@ -32,7 +32,7 @@ set_dnf_option() {
 add_comment() {
     local line="$1"
 
-    $SUDO grep -Fxq "$line" "$DNF_CONF" || \
+    grep -Fxq "$line" "$DNF_CONF" || \
         echo "$line" | $SUDO tee -a "$DNF_CONF" >/dev/null
 }
 
@@ -98,3 +98,8 @@ echo " Fedora post-install setup completed!"
 echo
 echo "It is recommended to reboot your system."
 echo "=================================="
+read -rp "Reboot now? [y/N]: " answer
+
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+    $SUDO reboot
+fi
