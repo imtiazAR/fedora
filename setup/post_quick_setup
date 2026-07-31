@@ -16,16 +16,26 @@ echo "=================================="
 # Configure DNF
 # --------------------------------------------------
 
+DNF_CONF="/etc/dnf/dnf.conf"
+
+set_dnf_option() {
+    local key="$1"
+    local value="$2"
+
+    if grep -q "^${key}=" "$DNF_CONF"; then
+        $SUDO sed -i "s/^${key}=.*/${key}=${value}/" "$DNF_CONF"
+    else
+        echo "${key}=${value}" | $SUDO tee -a "$DNF_CONF" >/dev/null
+    fi
+}
+
 echo "[1/6] Configuring DNF..."
 
-$SUDO tee /etc/dnf/dnf.conf >/dev/null <<'EOF'
-[main]
-max_parallel_downloads=10
-fastestmirror=true
-defaultyes=true
-keepcache=true
-#excludepkgs=libreoffice*,firefox*
-EOF
+set_dnf_option max_parallel_downloads 10
+set_dnf_option fastestmirror true
+set_dnf_option defaultyes true
+set_dnf_option keepcache true
+set_dnf_option #excludepkgs "libreoffice*,firefox*"
 
 # --------------------------------------------------
 # Enable RPM Fusion
@@ -65,7 +75,7 @@ $SUDO dnf group upgrade -y multimedia
 echo "[5/6] Refreshing firmware metadata..."
 
 fwupdmgr refresh --force || true
-fwupdmgr get-updates
+fwupdmgr get-updates || true
 
 # --------------------------------------------------
 # System Update
@@ -73,10 +83,11 @@ fwupdmgr get-updates
 
 echo "[6/6] Updating system..."
 
-$SUDO dnf upgrade --refresh -y
+$SUDO dnf upgrade -y --refresh
 
 echo
 echo "=================================="
-echo " Fedora setup completed!"
-echo " Please reboot your system."
+echo " Fedora post-install setup completed!"
+echo
+echo "It is recommended to reboot your system."
 echo "=================================="
