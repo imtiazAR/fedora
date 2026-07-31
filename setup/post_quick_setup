@@ -22,7 +22,7 @@ set_dnf_option() {
     local key="$1"
     local value="$2"
 
-    if grep -q "^${key}=" "$DNF_CONF"; then
+    if $SUDO grep -q "^${key}=" "$DNF_CONF"; then
         $SUDO sed -i "s/^${key}=.*/${key}=${value}/" "$DNF_CONF"
     else
         echo "${key}=${value}" | $SUDO tee -a "$DNF_CONF" >/dev/null
@@ -32,7 +32,7 @@ set_dnf_option() {
 add_comment() {
     local line="$1"
 
-    grep -Fxq "$line" "$DNF_CONF" || \
+    $SUDO grep -Fxq "$line" "$DNF_CONF" || \
         echo "$line" | $SUDO tee -a "$DNF_CONF" >/dev/null
 }
 
