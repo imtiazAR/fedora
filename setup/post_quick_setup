@@ -95,9 +95,11 @@ $SUDO dnf upgrade -y --refresh
 echo
 echo "=================================="
 echo " Fedora post-install setup completed!"
-echo
-echo "It is recommended to reboot your system."
 echo "=================================="
+echo
+echo "A reboot is recommended to apply all updates."
+echo
+
 read -rp "Reboot now? [y/N]: " answer
 
 if [[ "$answer" =~ ^[Yy]$ ]]; then
