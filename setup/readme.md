@@ -1,8 +1,6 @@
 # Fedora Post Install Script
 
-A simple Fedora post-install script for personal use.
-
-It performs the essential setup after a fresh Fedora installation.
+A simple Fedora post-install script for quickly setting up a fresh Fedora installation.
 
 ## Features
 
@@ -23,18 +21,18 @@ It performs the essential setup after a fresh Fedora installation.
 
 ## Usage
 
-Run the script directly from GitHub:
+Run the script directly:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/imtiazAR/fedora/main/fedora-post-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/imtiazAR/fedora/refs/heads/main/setup/post_quick_setup | bash
 ```
 
 Or download it first:
 
 ```bash
-curl -O https://raw.githubusercontent.com/imtiazAR/fedora/main/fedora-post-install.sh
-chmod +x fedora-post-install.sh
-./fedora-post-install.sh
+curl -O https://raw.githubusercontent.com/imtiazAR/fedora/refs/heads/main/setup/post_quick_setup
+chmod +x post_quick_setup
+./post_quick_setup
 ```
 
 ## What the script does
@@ -44,7 +42,7 @@ chmod +x fedora-post-install.sh
 3. Updates AppStream metadata
 4. Installs multimedia codecs
 5. Refreshes firmware metadata
-6. Updates the entire system
+6. Updates the system
 
 ## Requirements
 
@@ -54,7 +52,10 @@ chmod +x fedora-post-install.sh
 
 ## Notes
 
-* The script is idempotent and can be run multiple times.
-* Existing DNF options are updated instead of replacing the entire `dnf.conf`.
-* The script is intended for fresh Fedora installations.
+* Safe to run multiple times.
+* Existing `dnf.conf` settings are updated instead of replacing the file.
+* Intended for fresh Fedora installations.
 
+## License
+
+MIT
