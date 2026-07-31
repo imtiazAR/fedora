@@ -29,13 +29,20 @@ set_dnf_option() {
     fi
 }
 
+add_comment() {
+    local line="$1"
+
+    grep -Fxq "$line" "$DNF_CONF" || \
+        echo "$line" | $SUDO tee -a "$DNF_CONF" >/dev/null
+}
+
 echo "[1/6] Configuring DNF..."
 
 set_dnf_option max_parallel_downloads 10
 set_dnf_option fastestmirror true
 set_dnf_option defaultyes true
 set_dnf_option keepcache true
-set_dnf_option #excludepkgs "libreoffice*,firefox*"
+add_comment "#excludepkgs=libreoffice*,firefox*"
 
 # --------------------------------------------------
 # Enable RPM Fusion
