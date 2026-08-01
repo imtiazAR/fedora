@@ -36,19 +36,55 @@ add_comment() {
         echo "$line" | $SUDO tee -a "$DNF_CONF" >/dev/null
 }
 
-echo "[1/6] Configuring DNF..."
+echo "[1/5] Configuring DNF..."
 
 set_dnf_option max_parallel_downloads 10
 set_dnf_option fastestmirror true
 set_dnf_option defaultyes true
 set_dnf_option keepcache true
-add_comment "#excludepkgs=libreoffice*,firefox*"
+
+echo
+echo "Add a commented excludepkgs example to dnf.conf?"
+echo "This lets you quickly exclude packages from updates later."
+echo
+
+reply=""
+
+for ((i=10; i>0; i--)); do
+    echo -ne "\rProceed? [Y/n] (auto-yes in ${i}s): "
+
+    if [[ -t 0 ]]; then
+        if read -r -t 1 reply; then
+            break
+        fi
+    else
+        if read -r -t 1 reply </dev/tty; then
+            break
+        fi
+    fi
+done
+
+echo
+
+case "${reply,,}" in
+    ""|y|yes)
+        add_comment "#excludepkgs=libreoffice*,firefox*"
+        echo "Added commented excludepkgs example."
+        ;;
+    n|no)
+        echo "Skipped."
+        ;;
+    *)
+        echo "Invalid input. Using default: Yes."
+        add_comment "#excludepkgs=libreoffice*,firefox*"
+        ;;
+esac
 
 # --------------------------------------------------
 # Enable RPM Fusion
 # --------------------------------------------------
 
-echo "[2/6] Enabling RPM Fusion..."
+echo "[2/5] Enabling RPM Fusion..."
 
 FEDORA_VERSION="$(rpm -E %fedora)"
 
@@ -56,20 +92,12 @@ $SUDO dnf install -y \
 "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-${FEDORA_VERSION}.noarch.rpm" \
 "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${FEDORA_VERSION}.noarch.rpm"
 
-# --------------------------------------------------
-# Multimedia
-# --------------------------------------------------
-
-echo "[3/5] Installing multimedia codecs..."
-
-$SUDO dnf swap -y ffmpeg-free ffmpeg --allowerasing
-
 
 # --------------------------------------------------
 # Firmware
 # --------------------------------------------------
 
-echo "[4/5] Refreshing firmware metadata..."
+echo "[3/5] Refreshing firmware metadata..."
 
 fwupdmgr refresh --force || true
 fwupdmgr get-updates || true
@@ -78,9 +106,19 @@ fwupdmgr get-updates || true
 # System Update
 # --------------------------------------------------
 
-echo "[5/5] Updating system..."
+echo "[4/5] Updating system..."
 
 $SUDO dnf upgrade -y --refresh
+
+# --------------------------------------------------
+# Multimedia
+# --------------------------------------------------
+
+echo "[5/5] Installing multimedia codecs..."
+
+$SUDO dnf swap -y ffmpeg-free ffmpeg --allowerasing
+
+
 
 echo
 echo "=================================="
