@@ -57,29 +57,19 @@ $SUDO dnf install -y \
 "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${FEDORA_VERSION}.noarch.rpm"
 
 # --------------------------------------------------
-# Enable AppStream metadata
-# --------------------------------------------------
-
-echo "[3/6] Updating AppStream..."
-
-$SUDO dnf group upgrade -y core
-
-# --------------------------------------------------
 # Multimedia
 # --------------------------------------------------
 
-echo "[4/6] Installing multimedia codecs..."
+echo "[3/5] Installing multimedia codecs..."
 
 $SUDO dnf swap -y ffmpeg-free ffmpeg --allowerasing
-
-$SUDO dnf group upgrade -y multimedia 
 
 
 # --------------------------------------------------
 # Firmware
 # --------------------------------------------------
 
-echo "[5/6] Refreshing firmware metadata..."
+echo "[4/5] Refreshing firmware metadata..."
 
 fwupdmgr refresh --force || true
 fwupdmgr get-updates || true
@@ -88,7 +78,7 @@ fwupdmgr get-updates || true
 # System Update
 # --------------------------------------------------
 
-echo "[6/6] Updating system..."
+echo "[5/5] Updating system..."
 
 $SUDO dnf upgrade -y --refresh
 
