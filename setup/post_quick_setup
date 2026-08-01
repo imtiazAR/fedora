@@ -58,9 +58,7 @@ echo
 echo "Configure excludepkgs?"
 echo
 echo "[Y] Keep it commented (recommended)"
-echo "[n] = Enable excludepkgs"
-echo
-echo "Proceed? [Y/n] (auto-yes in 10s):"
+echo "[n] Enable excludepkgs"
 echo
 
 reply=""
