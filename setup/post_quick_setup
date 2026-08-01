@@ -100,8 +100,20 @@ echo
 echo "A reboot is recommended to apply all updates."
 echo
 
-read -rp "Reboot now? [y/N]: " answer
+echo
 
-if [[ "$answer" =~ ^[Yy]$ ]]; then
-    $SUDO reboot
+if [[ -t 0 ]]; then
+    read -rp "Reboot now? [y/N]: " answer
+else
+    read -rp "Reboot now? [y/N]: " answer </dev/tty
 fi
+
+case "${answer,,}" in
+    y|yes)
+        echo "Rebooting..."
+        $SUDO reboot
+        ;;
+    *)
+        echo "Please reboot your system later to apply all changes."
+        ;;
+esac
