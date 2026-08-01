@@ -29,11 +29,22 @@ set_dnf_option() {
     fi
 }
 
-add_comment() {
-    local line="$1"
+set_excludepkgs() {
+    local state="$1"
 
-    grep -Fxq "$line" "$DNF_CONF" || \
-        echo "$line" | $SUDO tee -a "$DNF_CONF" >/dev/null
+    if grep -Eq '^#?excludepkgs=' "$DNF_CONF"; then
+        if [[ "$state" == "comment" ]]; then
+            $SUDO sed -Ei 's/^excludepkgs=/#excludepkgs=/' "$DNF_CONF"
+        else
+            $SUDO sed -Ei 's/^#excludepkgs=/excludepkgs=/' "$DNF_CONF"
+        fi
+    else
+        if [[ "$state" == "comment" ]]; then
+            echo "#excludepkgs=libreoffice*,firefox*" | $SUDO tee -a "$DNF_CONF" >/dev/null
+        else
+            echo "excludepkgs=libreoffice*,firefox*" | $SUDO tee -a "$DNF_CONF" >/dev/null
+        fi
+    fi
 }
 
 echo "[1/5] Configuring DNF..."
@@ -44,8 +55,12 @@ set_dnf_option defaultyes true
 set_dnf_option keepcache true
 
 echo
-echo "Add a commented excludepkgs example to dnf.conf?"
-echo "This lets you quickly exclude packages from updates later."
+echo "Configure excludepkgs?"
+echo
+echo "[Y] Keep it commented (recommended)"
+echo "[n] = Enable excludepkgs"
+echo
+echo "Proceed? [Y/n] (auto-yes in 10s):"
 echo
 
 reply=""
@@ -68,15 +83,17 @@ echo
 
 case "${reply,,}" in
     ""|y|yes)
-        add_comment "#excludepkgs=libreoffice*,firefox*"
-        echo "Added commented excludepkgs example."
+        set_excludepkgs comment
+        echo "excludepkgs is commented."
         ;;
     n|no)
-        echo "Skipped."
+        set_excludepkgs uncomment
+        echo "excludepkgs is enabled."
         ;;
     *)
-        echo "Invalid input. Using default: Yes."
-        add_comment "#excludepkgs=libreoffice*,firefox*"
+        echo "Invalid input. Using default."
+        set_excludepkgs comment
+        echo "excludepkgs is commented."
         ;;
 esac
 
