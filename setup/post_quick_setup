@@ -57,7 +57,7 @@ set_dnf_option keepcache true
 echo
 echo "Configure excludepkgs?"
 echo
-echo "[Y] Keep it commented (recommended)"
+echo "[Y] Disable excludepkgs (recommended)"
 echo "[n] Enable excludepkgs"
 echo
 
