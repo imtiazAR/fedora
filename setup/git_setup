@@ -1,0 +1,167 @@
+```bash
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if (( EUID != 0 )); then
+    SUDO="sudo"
+else
+    SUDO=""
+fi
+
+echo "=================================="
+echo " Git & GitHub Setup"
+echo "=================================="
+
+# --------------------------------------------------
+# Check dependencies
+# --------------------------------------------------
+
+if ! command -v git >/dev/null 2>&1; then
+    echo "Git is not installed."
+    echo "Install it first:"
+    echo "  sudo dnf install git"
+    exit 1
+fi
+
+if ! command -v gh >/dev/null 2>&1; then
+    echo "GitHub CLI (gh) is not installed."
+    echo "Install it first:"
+    echo "  sudo dnf install gh"
+    exit 1
+fi
+
+# --------------------------------------------------
+# Prompt helper
+# --------------------------------------------------
+
+prompt_default() {
+    local prompt="$1"
+    local default="$2"
+    local value
+
+    read -r \
+        -e \
+        -i "$default" \
+        -t 5 \
+        -p "$prompt [$default]: " \
+        value </dev/tty || true
+
+    printf '%s\n' "${value:-$default}"
+}
+
+# --------------------------------------------------
+# Git configuration
+# --------------------------------------------------
+
+DEFAULT_NAME="ImtiazAR"
+DEFAULT_EMAIL="imtiaz.abdurrahim@gmail.com"
+
+echo
+echo "Configure Git"
+echo "Press Enter to keep the default."
+echo "Automatically continues after 5 seconds."
+
+GIT_NAME=$(prompt_default "Git username" "$DEFAULT_NAME")
+GIT_EMAIL=$(prompt_default "Git email" "$DEFAULT_EMAIL")
+
+git config --global user.name "$GIT_NAME"
+git config --global user.email "$GIT_EMAIL"
+
+git config --global init.defaultBranch main
+git config --global color.ui auto
+git config --global merge.conflictstyle zdiff3
+git config --global core.editor micro
+
+echo
+echo "✓ Git configured."
+
+# --------------------------------------------------
+# GitHub authentication
+# --------------------------------------------------
+
+echo
+echo "Checking GitHub authentication..."
+
+if ! gh auth status >/dev/null 2>&1; then
+    echo
+    echo "GitHub login required."
+    echo
+
+    gh auth login
+
+    echo
+fi
+
+echo "✓ GitHub authenticated."
+
+# --------------------------------------------------
+# SSH key
+# --------------------------------------------------
+
+KEY="$HOME/.ssh/id_ed25519"
+TITLE="$(hostname)"
+
+if [[ ! -f "$KEY" ]]; then
+    echo
+    echo "Generating SSH key..."
+
+    mkdir -p "$HOME/.ssh"
+    chmod 700 "$HOME/.ssh"
+
+    ssh-keygen \
+        -t ed25519 \
+        -C "$GIT_EMAIL" \
+        -f "$KEY" \
+        -N ""
+
+    echo "✓ SSH key generated."
+else
+    echo
+    echo "✓ Existing SSH key found."
+fi
+
+# --------------------------------------------------
+# ssh-agent
+# --------------------------------------------------
+
+if ! pgrep -u "$USER" ssh-agent >/dev/null 2>&1; then
+    eval "$(ssh-agent -s)" >/dev/null
+fi
+
+ssh-add "$KEY" >/dev/null 2>&1 || true
+
+# --------------------------------------------------
+# Upload SSH key
+# --------------------------------------------------
+
+echo
+echo "Checking SSH key on GitHub..."
+
+if gh ssh-key list | grep -Fq "$TITLE"; then
+    echo "✓ SSH key with this device title already exists."
+else
+    echo
+    echo "Uploading SSH key to GitHub..."
+
+    gh ssh-key add "${KEY}.pub" \
+        --title "$TITLE"
+
+    echo "✓ SSH key uploaded."
+fi
+
+# --------------------------------------------------
+# Test SSH
+# --------------------------------------------------
+
+echo
+echo "Testing SSH connection..."
+echo
+
+ssh -T git@github.com || true
+
+echo
+echo "=================================="
+echo " Git setup completed successfully."
+echo "=================================="
+```
