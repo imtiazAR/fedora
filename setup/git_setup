@@ -1,7 +1,14 @@
-```bash
 #!/usr/bin/env bash
 
 set -euo pipefail
+
+echo "=================================="
+echo " Git & SSH Setup"
+echo "=================================="
+
+# --------------------------------------------------
+# Sudo
+# --------------------------------------------------
 
 if (( EUID != 0 )); then
     SUDO="sudo"
@@ -9,26 +16,40 @@ else
     SUDO=""
 fi
 
-echo "=================================="
-echo " Git & GitHub Setup"
-echo "=================================="
+# --------------------------------------------------
+# Check / Install Git
+# --------------------------------------------------
 
-# --------------------------------------------------
-# Check dependencies
-# --------------------------------------------------
+echo
+echo "Checking Git..."
 
 if ! command -v git >/dev/null 2>&1; then
     echo "Git is not installed."
-    echo "Install it first:"
-    echo "  sudo dnf install git"
-    exit 1
+    echo "Installing Git..."
+
+    $SUDO dnf install -y git
+
+    echo "✓ Git installed."
+else
+    echo "✓ Git is already installed."
 fi
 
-if ! command -v gh >/dev/null 2>&1; then
-    echo "GitHub CLI (gh) is not installed."
-    echo "Install it first:"
-    echo "  sudo dnf install gh"
-    exit 1
+# --------------------------------------------------
+# Check / Install Micro
+# --------------------------------------------------
+
+echo
+echo "Checking Micro..."
+
+if ! command -v micro >/dev/null 2>&1; then
+    echo "Micro is not installed."
+    echo "Installing Micro..."
+
+    $SUDO dnf install -y micro
+
+    echo "✓ Micro installed."
+else
+    echo "✓ Micro is already installed."
 fi
 
 # --------------------------------------------------
@@ -55,12 +76,16 @@ prompt_default() {
 # --------------------------------------------------
 
 DEFAULT_NAME="ImtiazAR"
-DEFAULT_EMAIL="imtiaz.abdurrahim@gmail.com"
+DEFAULT_EMAIL="169064290+imtiazAR@users.noreply.github.com"
 
 echo
-echo "Configure Git"
+echo "=================================="
+echo " Configure Git"
+echo "=================================="
+echo
 echo "Press Enter to keep the default."
 echo "Automatically continues after 5 seconds."
+echo
 
 GIT_NAME=$(prompt_default "Git username" "$DEFAULT_NAME")
 GIT_EMAIL=$(prompt_default "Git email" "$DEFAULT_EMAIL")
@@ -77,30 +102,10 @@ echo
 echo "✓ Git configured."
 
 # --------------------------------------------------
-# GitHub authentication
-# --------------------------------------------------
-
-echo
-echo "Checking GitHub authentication..."
-
-if ! gh auth status >/dev/null 2>&1; then
-    echo
-    echo "GitHub login required."
-    echo
-
-    gh auth login
-
-    echo
-fi
-
-echo "✓ GitHub authenticated."
-
-# --------------------------------------------------
 # SSH key
 # --------------------------------------------------
 
 KEY="$HOME/.ssh/id_ed25519"
-TITLE="$(hostname)"
 
 if [[ ! -f "$KEY" ]]; then
     echo
@@ -122,7 +127,7 @@ else
 fi
 
 # --------------------------------------------------
-# ssh-agent
+# SSH agent
 # --------------------------------------------------
 
 if ! pgrep -u "$USER" ssh-agent >/dev/null 2>&1; then
@@ -131,37 +136,57 @@ fi
 
 ssh-add "$KEY" >/dev/null 2>&1 || true
 
-# --------------------------------------------------
-# Upload SSH key
-# --------------------------------------------------
-
-echo
-echo "Checking SSH key on GitHub..."
-
-if gh ssh-key list | grep -Fq "$TITLE"; then
-    echo "✓ SSH key with this device title already exists."
-else
-    echo
-    echo "Uploading SSH key to GitHub..."
-
-    gh ssh-key add "${KEY}.pub" \
-        --title "$TITLE"
-
-    echo "✓ SSH key uploaded."
-fi
+echo "✓ SSH key added to ssh-agent."
 
 # --------------------------------------------------
-# Test SSH
+# Show public key
 # --------------------------------------------------
-
-echo
-echo "Testing SSH connection..."
-echo
-
-ssh -T git@github.com || true
 
 echo
 echo "=================================="
-echo " Git setup completed successfully."
+echo " SSH Public Key"
 echo "=================================="
-```
+echo
+
+cat "${KEY}.pub"
+
+echo
+
+echo "Add this key to your Git hosting account."
+echo
+echo "GitHub:"
+echo "  Settings → SSH and GPG keys → New SSH key"
+echo
+echo "GitLab:"
+echo "  Preferences → SSH Keys → Add new key"
+echo
+
+# --------------------------------------------------
+# Test commands
+# --------------------------------------------------
+
+echo "=================================="
+echo " Setup Complete"
+echo "=================================="
+
+echo
+echo "Git configuration:"
+echo "  Name : $(git config --global user.name)"
+echo "  Email: $(git config --global user.email)"
+
+echo
+echo "SSH key:"
+echo "  $KEY"
+
+echo
+echo "Test GitHub SSH:"
+echo "  ssh -T git@github.com"
+
+echo
+echo "Test GitLab SSH:"
+echo "  ssh -T git@gitlab.com"
+
+echo
+echo "=================================="
+echo " Git & SSH setup completed."
+echo "=================================="
