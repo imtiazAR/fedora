@@ -119,8 +119,11 @@ if [[ ! -f "$KEY" ]]; then
         -C "$GIT_EMAIL" \
         -f "$KEY" \
         -N ""
-
-    echo "✓ SSH key generated."
+    
+    chmod 600 "$KEY"
+    chmod 644 "${KEY}.pub"
+ 
+echo "✓ SSH key generated."
 else
     echo
     echo "✓ Existing SSH key found."
