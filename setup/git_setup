@@ -126,17 +126,6 @@ else
     echo "✓ Existing SSH key found."
 fi
 
-# --------------------------------------------------
-# SSH agent
-# --------------------------------------------------
-
-if ! pgrep -u "$USER" ssh-agent >/dev/null 2>&1; then
-    eval "$(ssh-agent -s)" >/dev/null
-fi
-
-ssh-add "$KEY" >/dev/null 2>&1 || true
-
-echo "✓ SSH key added to ssh-agent."
 
 # --------------------------------------------------
 # Show public key
