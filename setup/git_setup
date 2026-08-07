@@ -127,6 +127,10 @@ echo "✓ SSH key generated."
 else
     echo
     echo "✓ Existing SSH key found."
+
+    chmod 700 "$HOME/.ssh"
+    chmod 600 "$KEY"
+    chmod 644 "${KEY}.pub"
 fi
 
 
