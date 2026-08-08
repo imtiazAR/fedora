@@ -24,13 +24,13 @@ A simple Fedora post-install script for quickly setting up a fresh Fedora instal
 Run the script directly:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/imtiazAR/fedora/refs/heads/main/setup/post_quick_setup | bash
+curl -fsSL https://raw.githubusercontent.com/imtiazAR/fedora/main/setup/post_quick_setup | bash
 ```
 
 Or download it first:
 
 ```bash
-curl -O https://raw.githubusercontent.com/imtiazAR/fedora/refs/heads/main/setup/post_quick_setup
+curl -O https://raw.githubusercontent.com/imtiazAR/fedora/main/setup/post_quick_setup
 chmod +x post_quick_setup
 ./post_quick_setup
 ```
@@ -90,7 +90,7 @@ The script automatically:
 Run the script directly from GitHub:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/imtiazAR/fedora/refs/heads/main/setup/git_setup | bash
+curl -fsSL https://raw.githubusercontent.com/imtiazAR/fedora/main/setup/git_setup | bash
 ```
 
 The script is designed to run directly with `curl | bash`.
