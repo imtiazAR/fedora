@@ -96,27 +96,26 @@ if [[ ! -f "$KEY" ]]; then
     echo "Generating SSH key..."
 
     mkdir -p "$HOME/.ssh"
-    chmod 700 "$HOME/.ssh"
+    
 
     ssh-keygen \
         -t ed25519 \
-        -C "$GIT_EMAIL" \
+        -C "$DEFAULT_EMAIL" \
         -f "$KEY" \
         -N ""
     
-    chmod 600 "$KEY"
-    chmod 644 "${KEY}.pub"
- 
+    
 echo "✓ SSH key generated."
 else
     echo
     echo "✓ Existing SSH key found."
 
+    
+fi
+
     chmod 700 "$HOME/.ssh"
     chmod 600 "$KEY"
     chmod 644 "${KEY}.pub"
-fi
-
 
 # --------------------------------------------------
 # Show public key
