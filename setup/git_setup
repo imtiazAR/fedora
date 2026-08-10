@@ -90,32 +90,42 @@ echo "✓ Git configured."
 # --------------------------------------------------
 
 KEY="$HOME/.ssh/id_ed25519"
+PUB_KEY="${KEY}.pub"
+
+mkdir -p "$HOME/.ssh"
+chmod 700 "$HOME/.ssh"
 
 if [[ ! -f "$KEY" ]]; then
     echo
     echo "Generating SSH key..."
-
-    mkdir -p "$HOME/.ssh"
-    
 
     ssh-keygen \
         -t ed25519 \
         -C "$DEFAULT_EMAIL" \
         -f "$KEY" \
         -N ""
-    
-    
-echo "✓ SSH key generated."
+
+    echo "✓ SSH key generated."
+
 else
     echo
     echo "✓ Existing SSH key found."
 
-    
+  
+# Regenerate public key if missing
+ 
+   if [[ ! -f "$PUB_KEY" ]]; then
+        echo "Public key is missing."
+        echo "Regenerating public key from private key..."
+
+        ssh-keygen -y -f "$KEY" > "$PUB_KEY"
+
+        echo "✓ Public key regenerated."
+    fi
 fi
 
-    chmod 700 "$HOME/.ssh"
-    chmod 600 "$KEY"
-    chmod 644 "${KEY}.pub" 2>/dev/null || true
+chmod 600 "$KEY"
+chmod 644 "$PUB_KEY"
 
 # --------------------------------------------------
 # Show public key
