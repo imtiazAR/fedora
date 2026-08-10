@@ -137,7 +137,7 @@ echo " SSH Public Key"
 echo "=================================="
 echo
 
-cat "${KEY}.pub"
+cat "$PUB_KEY"
 
 echo
 
