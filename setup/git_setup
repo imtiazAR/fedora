@@ -115,7 +115,7 @@ fi
 
     chmod 700 "$HOME/.ssh"
     chmod 600 "$KEY"
-    chmod 644 "${KEY}.pub"
+    chmod 644 "${KEY}.pub" 2>/dev/null || true
 
 # --------------------------------------------------
 # Show public key
