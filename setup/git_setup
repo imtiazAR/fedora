@@ -52,24 +52,6 @@ else
     echo "✓ Micro is already installed."
 fi
 
-# --------------------------------------------------
-# Prompt helper
-# --------------------------------------------------
-
-prompt_default() {
-    local prompt="$1"
-    local default="$2"
-    local value
-
-    read -r \
-        -e \
-        -i "$default" \
-        -t 5 \
-        -p "$prompt [$default]: " \
-        value </dev/tty || true
-
-    printf '%s\n' "${value:-$default}"
-}
 
 # --------------------------------------------------
 # Git configuration
@@ -83,15 +65,10 @@ echo "=================================="
 echo " Configure Git"
 echo "=================================="
 echo
-echo "Press Enter to keep the default."
-echo "Automatically continues after 5 seconds."
-echo
 
-GIT_NAME=$(prompt_default "Git username" "$DEFAULT_NAME")
-GIT_EMAIL=$(prompt_default "Git email" "$DEFAULT_EMAIL")
 
-git config --global user.name "$GIT_NAME"
-git config --global user.email "$GIT_EMAIL"
+git config --global user.name "$DEFAULT_NAME"
+git config --global user.email "$DEFAULT_EMAIL"
 
 git config --global init.defaultBranch main
 git config --global color.ui auto
