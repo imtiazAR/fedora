@@ -61,7 +61,7 @@ GIT_CONFIG="$HOME/.gitconfig"
 
 if [[ -f "$GIT_CONFIG" ]]; then
     TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
-    BACKUP="${GIT_CONFIG}.bac-${TIMESTAMP}"
+    BACKUP="${GIT_CONFIG}.bak-${TIMESTAMP}"
 
     cp "$GIT_CONFIG" "$BACKUP"
 
