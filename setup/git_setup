@@ -57,6 +57,13 @@ fi
 # Git configuration
 # --------------------------------------------------
 
+GIT_CONFIG="$HOME/.gitconfig"
+
+if [[ -f "$GIT_CONFIG" ]]; then
+    cp "$GIT_CONFIG" "${GIT_CONFIG}.bak"
+    rm -f "$GIT_CONFIG"
+fi
+
 DEFAULT_NAME="ImtiazAR"
 DEFAULT_EMAIL="169064290+imtiazAR@users.noreply.github.com"
 
