@@ -228,3 +228,8 @@ echo "  $PUB_KEY"
 echo
 echo "Public key content:"
 cat "$PUB_KEY"
+
+echo
+echo "=================================="
+echo " DONE "
+echo "=================================="
