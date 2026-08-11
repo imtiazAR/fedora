@@ -60,8 +60,13 @@ fi
 GIT_CONFIG="$HOME/.gitconfig"
 
 if [[ -f "$GIT_CONFIG" ]]; then
-    cp "$GIT_CONFIG" "${GIT_CONFIG}.bak"
-    rm -f "$GIT_CONFIG"
+    TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
+    BACKUP="${GIT_CONFIG}.bac-${TIMESTAMP}"
+
+    cp "$GIT_CONFIG" "$BACKUP"
+
+    echo "✓ Existing Git config backed up:"
+    echo "  $BACKUP"
 fi
 
 DEFAULT_NAME="ImtiazAR"
