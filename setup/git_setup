@@ -198,3 +198,33 @@ echo
 echo "=================================="
 echo " Git & SSH setup completed."
 echo "=================================="
+
+echo
+echo "=================================="
+echo " Summary "
+echo "=================================="
+
+echo
+echo "=================================="
+echo " Git Configuration"
+echo "=================================="
+echo
+
+git config --global --list --show-origin
+
+echo
+echo "=================================="
+echo " SSH Configuration"
+echo "=================================="
+echo
+
+echo "Private key:"
+echo "  $KEY"
+
+echo
+echo "Public key:"
+echo "  $PUB_KEY"
+
+echo
+echo "Public key content:"
+cat "$PUB_KEY"
