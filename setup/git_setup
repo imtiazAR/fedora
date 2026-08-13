@@ -211,6 +211,11 @@ echo "=================================="
 echo
 
 git config --global --list --show-origin
+echo
+echo "=================================="
+echo
+
+cat $HOME/.gitconfig
 
 echo
 echo "=================================="
