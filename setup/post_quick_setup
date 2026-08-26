@@ -27,9 +27,9 @@ fi
 echo "Battery detected: $BATTERY"
 echo "Setting charge limit to 50%-55%..."
 
-sudo mkdir -p /etc/udev/hwdb.d
+$SUDO mkdir -p /etc/udev/hwdb.d
 
-sudo tee "$HWDB_FILE" >/dev/null <<'EOF'
+$SUDO tee "$HWDB_FILE" >/dev/null <<'EOF'
 # To add local overrides, create a new file
 # /etc/udev/hwdb.d/61-battery-local.hwdb
 # and add your rules there. To load the new rules execute (as root):
@@ -46,17 +46,12 @@ battery:*:*:dmi:*
  CHARGE_LIMIT=50,55
 EOF
 
-sudo systemd-hwdb update
-sudo udevadm trigger -v -p "/sys/class/power_supply/$BATTERY"
+$SUDO systemd-hwdb update
 
 echo
 echo "Battery charge limit configured: 50%-55%."
 echo
-echo "Start threshold:"
-cat "/sys/class/power_supply/$BATTERY/charge_control_start_threshold"
 
-echo "End threshold:"
-cat "/sys/class/power_supply/$BATTERY/charge_control_end_threshold"
 
 # --------------------------------------------------
 # Configure DNF
