@@ -16,6 +16,10 @@ echo "=================================="
 # Set Battery Limit
 # --------------------------------------------------
 
+echo "=========================================================="
+echo " Setting limit charging for preserve battery health. "
+echo "=========================================================="
+
 HWDB_FILE="/etc/udev/hwdb.d/61-battery-local.hwdb"
 BATTERY=$(find /sys/class/power_supply -maxdepth 1 -type l -name 'BAT*' -printf '%f\n' | head -n1)
 
@@ -153,7 +157,11 @@ esac
 # Enable RPM Fusion
 # --------------------------------------------------
 
-echo "[2/5] Enabling RPM Fusion..."
+echo "[2/5] Enabling RPM Fusion and flathub repo..."
+
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+echo "flathub.flatpakrepo added."
 
 FEDORA_VERSION="$(rpm -E %fedora)"
 
@@ -170,6 +178,9 @@ echo "[3/5] Refreshing firmware metadata..."
 
 fwupdmgr refresh --force || true
 fwupdmgr get-updates || true
+
+echo "fwupdmgr update"
+echo "To update firmware use this command."
 
 # --------------------------------------------------
 # System Update
