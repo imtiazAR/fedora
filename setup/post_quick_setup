@@ -17,7 +17,7 @@ echo "=================================="
 # --------------------------------------------------
 
 echo "=========================================================="
-echo " Setting limit charging for preserve battery health. "
+echo " Configuring battery charge limits. "
 echo "=========================================================="
 
 HWDB_FILE="/etc/udev/hwdb.d/61-battery-local.hwdb"
@@ -53,16 +53,16 @@ EOF
 
         if $SUDO udevadm trigger -v "/sys/class/power_supply/$BATTERY"; then
             echo "udevadm triggered successfully."
+            echo
+            echo "Battery charge limit setup completed."
+            echo
         else
             echo "Warning: udevadm trigger failed. Continuing..."
-    fi
+        fi
     else
-    echo "Warning: systemd-hwdb update failed. Skipping battery setup."
+        echo "Warning: systemd-hwdb update failed. Skipping battery setup."
     fi
 
-    echo
-    echo "Battery charge limit setup completed."
-    echo
 
     if [[ -f "/sys/class/power_supply/$BATTERY/charge_control_start_threshold" ]]; then
         echo "Start threshold:"
