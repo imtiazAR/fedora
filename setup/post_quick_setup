@@ -45,7 +45,16 @@ battery:*:*:dmi:*
 EOF
 
     $SUDO systemd-hwdb update
-    $SUDO udevadm trigger -v -p "/sys/class/power_supply/$BATTERY" || true
+   
+    echo
+    echo "systemd-hwdb updated."
+    echo
+
+    $SUDO udevadm trigger -v "/sys/class/power_supply/$BATTERY" || true
+    
+    echo
+    echo "udevadm triggered."
+    echo
 
     echo
     echo "Battery charge limit configured: 50%-55%."
