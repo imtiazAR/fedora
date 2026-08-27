@@ -63,7 +63,8 @@ EOF
         echo "Warning: systemd-hwdb update failed. Skipping battery setup."
     fi
 
-
+        echo
+        echo "Current battery charge thresholds:"
     if [[ -f "/sys/class/power_supply/$BATTERY/charge_control_start_threshold" ]]; then
         echo "Start threshold:"
         cat "/sys/class/power_supply/$BATTERY/charge_control_start_threshold"
@@ -192,6 +193,7 @@ echo "[3/5] Refreshing firmware metadata..."
 fwupdmgr refresh --force || true
 fwupdmgr get-updates || true
 
+echo
 echo "To install available firmware updates, run: "
 echo "fwupdmgr update"
 
