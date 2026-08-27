@@ -159,7 +159,7 @@ esac
 
 echo "[2/5] Enabling RPM Fusion and flathub repo..."
 
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+$SUDO flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 echo "flathub.flatpakrepo added."
 
