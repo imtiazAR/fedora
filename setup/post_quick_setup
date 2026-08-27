@@ -20,20 +20,18 @@ HWDB_FILE="/etc/udev/hwdb.d/61-battery-local.hwdb"
 BATTERY=$(find /sys/class/power_supply -maxdepth 1 -type l -name 'BAT*' -printf '%f\n' | head -n1)
 
 if [[ -z "$BATTERY" ]]; then
-    echo "Error: No battery found."
-    exit 1
-fi
+    echo "No battery found. Skipping battery setup."
+else
+    echo "Battery detected: $BATTERY"
+    echo "Setting charge limit to 50%-55%..."
 
-echo "Battery detected: $BATTERY"
-echo "Setting charge limit to 50%-55%..."
+    $SUDO mkdir -p /etc/udev/hwdb.d
 
-$SUDO mkdir -p /etc/udev/hwdb.d
-
-$SUDO tee "$HWDB_FILE" >/dev/null <<'EOF'
+    $SUDO tee "$HWDB_FILE" >/dev/null <<'EOF'
 # To add local overrides, create a new file
 # /etc/udev/hwdb.d/61-battery-local.hwdb
 # and add your rules there. To load the new rules execute (as root):
-# systemd-hwdb  update
+# systemd-hwdb update
 # udevadm trigger -v -p /sys/class/power_supply/BAT
 # where BAT is the battery in question.
 #
@@ -46,18 +44,18 @@ battery:*:*:dmi:*
  CHARGE_LIMIT=50,55
 EOF
 
-$SUDO systemd-hwdb update
-$SUDO udevadm trigger -v -p "/sys/class/power_supply/$BATTERY"
+    $SUDO systemd-hwdb update
+    $SUDO udevadm trigger -v -p "/sys/class/power_supply/$BATTERY" || true
 
-echo
-echo "Battery charge limit configured: 50%-55%."
-echo
-echo "Start threshold:"
-cat "/sys/class/power_supply/$BATTERY/charge_control_start_threshold"
+    echo
+    echo "Battery charge limit configured: 50%-55%."
+    echo
+    echo "Start threshold:"
+    cat "/sys/class/power_supply/$BATTERY/charge_control_start_threshold" || true
 
-echo "End threshold:"
-cat "/sys/class/power_supply/$BATTERY/charge_control_end_threshold"
-
+    echo "End threshold:"
+    cat "/sys/class/power_supply/$BATTERY/charge_control_end_threshold" || true
+fi
 
 # --------------------------------------------------
 # Configure DNF
