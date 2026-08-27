@@ -1,7 +1,7 @@
 ## Quick Start
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/imtiazAR/fedora/main/apps/signal_installer.sh)
+curl -fsSL https://raw.githubusercontent.com/imtiazAR/fedora/main/setup/post_quick_setup | bash
 ```
 
 # Fedora
