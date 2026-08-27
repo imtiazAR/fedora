@@ -48,26 +48,31 @@ battery:*:*:dmi:*
  CHARGE_LIMIT=50,55
 EOF
 
-    $SUDO systemd-hwdb update
-   
+    if $SUDO systemd-hwdb update; then
+        echo "systemd-hwdb updated."
+
+        if $SUDO udevadm trigger -v "/sys/class/power_supply/$BATTERY"; then
+            echo "udevadm triggered successfully."
+        else
+            echo "Warning: udevadm trigger failed. Continuing..."
+    fi
+    else
+    echo "Warning: systemd-hwdb update failed. Skipping battery setup."
+    fi
+
     echo
-    echo "systemd-hwdb updated."
+    echo "Battery charge limit setup completed."
     echo
 
-    $SUDO udevadm trigger -v "/sys/class/power_supply/$BATTERY" || true
-    
-    echo
-    echo "udevadm triggered."
-    echo
+    if [[ -f "/sys/class/power_supply/$BATTERY/charge_control_start_threshold" ]]; then
+        echo "Start threshold:"
+        cat "/sys/class/power_supply/$BATTERY/charge_control_start_threshold"
+    fi
 
-    echo
-    echo "Battery charge limit configured: 50%-55%."
-    echo
-    echo "Start threshold:"
-    cat "/sys/class/power_supply/$BATTERY/charge_control_start_threshold" || true
-
-    echo "End threshold:"
-    cat "/sys/class/power_supply/$BATTERY/charge_control_end_threshold" || true
+    if [[ -f "/sys/class/power_supply/$BATTERY/charge_control_end_threshold" ]]; then
+        echo "End threshold:"
+        cat "/sys/class/power_supply/$BATTERY/charge_control_end_threshold"
+    fi
 fi
 
 # --------------------------------------------------
@@ -159,9 +164,17 @@ esac
 
 echo "[2/5] Enabling RPM Fusion and flathub repo..."
 
+if ! command -v flatpak >/dev/null 2>&1; then
+    echo "Flatpak not found. Installing..."
+    $SUDO dnf install -y flatpak
+fi
+
 $SUDO flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
+echo "Flathub repository configured."
+echo
 echo "flathub.flatpakrepo added."
+echo
 
 FEDORA_VERSION="$(rpm -E %fedora)"
 
@@ -179,8 +192,8 @@ echo "[3/5] Refreshing firmware metadata..."
 fwupdmgr refresh --force || true
 fwupdmgr get-updates || true
 
+echo "To install available firmware updates, run: "
 echo "fwupdmgr update"
-echo "To update firmware use this command."
 
 # --------------------------------------------------
 # System Update
