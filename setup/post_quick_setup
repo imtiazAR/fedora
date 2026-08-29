@@ -64,6 +64,11 @@ EOF
         echo "Warning: systemd-hwdb update failed. Skipping battery setup."
     fi
 
+       
+        echo
+        echo
+        cat /etc/udev/hwdb.d/61-battery-local.hwdb
+        echo
         echo
         echo "Current battery charge thresholds:"
     if [[ -f "/sys/class/power_supply/$BATTERY/charge_control_start_threshold" ]]; then
