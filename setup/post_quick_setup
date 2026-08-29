@@ -25,6 +25,7 @@ BATTERY=$(find /sys/class/power_supply -maxdepth 1 -type l -name 'BAT*' -printf 
 
 if [[ -z "$BATTERY" ]]; then
     echo "No battery found. Skipping battery setup."
+    echo
 else
     echo "Battery detected: $BATTERY"
     echo "Setting charge limit to 50%-55%..."
@@ -111,7 +112,11 @@ set_excludepkgs() {
     fi
 }
 
+echo
+echo
 echo "[1/5] Configuring DNF..."
+echo
+echo
 
 set_dnf_option max_parallel_downloads 10
 set_dnf_option fastestmirror true
@@ -163,7 +168,11 @@ esac
 # Enable RPM Fusion
 # --------------------------------------------------
 
+echo
+echo
 echo "[2/5] Enabling RPM Fusion and flathub repo..."
+echo
+echo
 
 if ! command -v flatpak >/dev/null 2>&1; then
     echo "Flatpak not found. Installing..."
@@ -188,7 +197,11 @@ $SUDO dnf install -y \
 # Firmware
 # --------------------------------------------------
 
+echo
+echo
 echo "[3/5] Refreshing firmware metadata..."
+echo
+echo
 
 fwupdmgr refresh --force || true
 fwupdmgr get-updates || true
@@ -196,12 +209,18 @@ fwupdmgr get-updates || true
 echo
 echo "To install available firmware updates, run: "
 echo "fwupdmgr update"
+echo
+echo
 
 # --------------------------------------------------
 # System Update
 # --------------------------------------------------
 
+echo
+echo
 echo "[4/5] Updating system..."
+echo
+echo
 
 $SUDO dnf upgrade -y --refresh
 
@@ -209,7 +228,11 @@ $SUDO dnf upgrade -y --refresh
 # Multimedia
 # --------------------------------------------------
 
+echo
+echo
 echo "[5/5] Installing multimedia codecs..."
+echo
+echo
 
 $SUDO dnf swap -y ffmpeg-free ffmpeg --allowerasing
 
