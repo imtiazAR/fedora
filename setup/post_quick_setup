@@ -358,23 +358,38 @@ gsettings set org.gnome.shell.keybindings screenshot-window "['<Alt>s']"
 gsettings set org.gnome.shell.keybindings show-screenshot-ui "['<Shift><Super>s']"
 gsettings set org.gnome.shell.keybindings toggle-message-tray "@as []"
 
-# Ptyxis
+# ============================================================
+# Custom Shortcut
+# Super + Enter → Ptyxis
+# ============================================================
+
+CUSTOM_SCHEMA="org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
 CUSTOM_PATH="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
 
-gsettings set org.gnome.settings-daemon.plugins.media-keys \
-    custom-keybindings "['$CUSTOM_PATH']"
+# Register custom shortcut path
+gsettings set \
+    org.gnome.settings-daemon.plugins.media-keys \
+    custom-keybindings \
+    "['$CUSTOM_PATH']"
+
+# Configure relocatable schema instance
+gsettings set \
+    "$CUSTOM_SCHEMA" \
+    "$CUSTOM_PATH" \
+    name \
+    "'Terminal'"
 
 gsettings set \
-    org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 \
-    name "'Terminal'"
+    "$CUSTOM_SCHEMA" \
+    "$CUSTOM_PATH" \
+    command \
+    "'ptyxis'"
 
 gsettings set \
-    org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 \
-    command "'ptyxis'"
-
-gsettings set \
-    org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 \
-    binding "'<Super>Return'"
+    "$CUSTOM_SCHEMA" \
+    "$CUSTOM_PATH" \
+    binding \
+    "'<Super>Return'"
 
 echo "GNOME setup complete."
 
