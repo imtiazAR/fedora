@@ -45,17 +45,16 @@ echo "==> Extracting theme..."
 $SUDO mkdir -p "$THEME_DIR"
 $SUDO rm -rf "${THEME_DIR}/${THEME}"
 
-# Unzip and ensure correct file permissions
+# Extract zip file
 $SUDO unzip -oq "$TMP_DIR/theme.zip" -d "$THEME_DIR"
+
+# Fix permissions so GRUB and user tools can read it
 $SUDO chmod -R a+rX "${THEME_DIR}/${THEME}"
 
-# Verify theme
-if [[ ! -f "${THEME_DIR}/${THEME}/theme.txt" ]]; then
-    # Fallback search if path mismatch occurs
-    FOUND_THEME=$(find "$THEME_DIR" -name "theme.txt" -print -quit)
-    if [[ -n "$FOUND_THEME" ]]; then
-        echo "Found theme at: $FOUND_THEME"
-    else
+# Verify theme with sudo to prevent permission issues
+if ! $SUDO test -f "${THEME_DIR}/${THEME}/theme.txt"; then
+    FOUND_THEME=$($SUDO find "$THEME_DIR" -name "theme.txt" -print -quit 2>/dev/null)
+    if [[ -z "$FOUND_THEME" ]]; then
         error "theme.txt was not found after extraction."
     fi
 fi
