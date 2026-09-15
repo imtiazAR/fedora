@@ -43,15 +43,22 @@ curl -fL --retry 3 "$URL" -o "$TMP_DIR/theme.zip"
 echo "==> Extracting theme..."
 
 $SUDO mkdir -p "$THEME_DIR"
-
-# Remove previous version to avoid stale files
 $SUDO rm -rf "${THEME_DIR}/${THEME}"
 
+# Unzip and ensure correct file permissions
 $SUDO unzip -oq "$TMP_DIR/theme.zip" -d "$THEME_DIR"
+$SUDO chmod -R a+rX "${THEME_DIR}/${THEME}"
 
 # Verify theme
-[[ -f "${THEME_DIR}/${THEME}/theme.txt" ]] || \
-    error "theme.txt was not found after extraction."
+if [[ ! -f "${THEME_DIR}/${THEME}/theme.txt" ]]; then
+    # Fallback search if path mismatch occurs
+    FOUND_THEME=$(find "$THEME_DIR" -name "theme.txt" -print -quit)
+    if [[ -n "$FOUND_THEME" ]]; then
+        echo "Found theme at: $FOUND_THEME"
+    else
+        error "theme.txt was not found after extraction."
+    fi
+fi
 
 echo "==> Backing up GRUB configuration..."
 
