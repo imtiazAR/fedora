@@ -260,16 +260,15 @@ echo "=========================================="
 echo " GNOME Setup"
 echo "=========================================="
 
+#Auto Updates
+gsettings set org.gnome.software download-updates false
+gsettings set org.gnome.software download-updates-notify false
+
 # Appearance
 gsettings set org.gnome.desktop.interface color-scheme "'prefer-dark'"
 gsettings set org.gnome.desktop.interface accent-color "'green'"
-gsettings set org.gnome.desktop.interface gtk-theme "'Adwaita'"
-gsettings set org.gnome.desktop.interface icon-theme "'Adwaita'"
-gsettings set org.gnome.desktop.interface cursor-theme "'Adwaita'"
-gsettings set org.gnome.desktop.interface cursor-size 24
-gsettings set org.gnome.desktop.interface enable-animations true
-gsettings set org.gnome.desktop.interface overlay-scrolling true
-gsettings set org.gnome.desktop.interface gtk-enable-primary-paste false
+
+
 
 # Clock
 gsettings set org.gnome.desktop.interface clock-format "'24h'"
@@ -281,10 +280,6 @@ gsettings set org.gnome.desktop.interface show-battery-percentage true
 gsettings set org.gnome.desktop.input-sources sources \
     "[('xkb', 'us'), ('ibus', 'm17n:bn:khipro')]"
 
-gsettings set org.gnome.desktop.input-sources mru-sources \
-    "[('xkb', 'us'), ('ibus', 'm17n:bn:khipro')]"
-
-gsettings set org.gnome.desktop.input-sources current 0
 
 # Input Source Shortcuts
 gsettings set org.gnome.desktop.wm.keybindings switch-input-source \
@@ -294,26 +289,14 @@ gsettings set org.gnome.desktop.wm.keybindings switch-input-source-backward \
     "['<Shift><Alt>space']"
 
 # Window
-gsettings set org.gnome.desktop.wm.preferences focus-mode "'click'"
 gsettings set org.gnome.desktop.wm.preferences auto-raise true
 gsettings set org.gnome.desktop.wm.preferences button-layout \
     "'appmenu:minimize,maximize,close'"
 
-# Disable maximize/unmaximize shortcuts
-gsettings set org.gnome.desktop.wm.keybindings maximize "@as []"
-gsettings set org.gnome.desktop.wm.keybindings unmaximize "@as []"
-gsettings set org.gnome.desktop.wm.keybindings activate-window-menu "@as []"
 
-# Mutter
-gsettings set org.gnome.mutter edge-tiling false
-gsettings set org.gnome.mutter overlay-key "'Super'"
-
-# Touchpad
-gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
-gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
 
 # Keyboard
-gsettings set org.gnome.desktop.peripherals.keyboard numlock-state false
+gsettings set org.gnome.desktop.peripherals.keyboard numlock-state true
 
 # Night Light
 gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
@@ -327,7 +310,7 @@ gsettings set org.gnome.desktop.privacy disable-camera true
 gsettings set org.gnome.desktop.privacy report-technical-problems false
 
 # Nautilus
-gsettings set org.gnome.nautilus.preferences click-policy "'single'"
+gsettings set org.gnome.nautilus.preferences click-policy "'double'"
 gsettings set org.gnome.nautilus.preferences default-folder-viewer "'list-view'"
 gsettings set org.gnome.nautilus.preferences show-create-link true
 gsettings set org.gnome.nautilus.preferences show-delete-permanently true
@@ -343,14 +326,6 @@ gsettings set org.gnome.desktop.calendar show-weekdate true
 gsettings set org.gnome.desktop.sound allow-volume-above-100-percent true
 gsettings set org.gnome.desktop.sound event-sounds true
 
-# Break Reminders
-gsettings set org.gnome.desktop.break-reminders.eyesight play-sound true
-gsettings set org.gnome.desktop.break-reminders.movement duration-seconds 300
-gsettings set org.gnome.desktop.break-reminders.movement interval-seconds 1800
-gsettings set org.gnome.desktop.break-reminders.movement play-sound true
-
-# Screen Time
-gsettings set org.gnome.desktop.screen-time-limits daily-limit-seconds 28800
 
 # Screenshot Shortcuts
 gsettings set org.gnome.shell.keybindings screenshot "['Print']"
