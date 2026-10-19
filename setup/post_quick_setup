@@ -232,9 +232,18 @@ echo
 echo
 
 $SUDO dnf upgrade -y --refresh
+echo
+echo
+
 $SUDO dnf install -y gnome-extensions-app
+echo
+echo
+
 $SUDO dnf config-manager setopt google-chrome.enabled=1
 $SUDO dnf install -y google-chrome-stable
+
+echo
+echo
 
 
 # --------------------------------------------------
