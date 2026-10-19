@@ -228,6 +228,7 @@ echo
 echo
 
 $SUDO dnf upgrade -y --refresh
+$SUDO dnf install -y gnome-extensions-app
 
 # --------------------------------------------------
 # Multimedia
