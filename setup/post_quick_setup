@@ -186,7 +186,11 @@ fi
 
 $SUDO flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
+$SUDO flatpak remote-modify --enable flathub
+
 echo "Flathub repository configured."
+echo
+flatpak remotes --system --show-details
 echo
 echo "flathub.flatpakrepo added."
 echo
@@ -229,6 +233,9 @@ echo
 
 $SUDO dnf upgrade -y --refresh
 $SUDO dnf install -y gnome-extensions-app
+$SUDO dnf config-manager setopt google-chrome.enabled=1
+$SUDO dnf install -y google-chrome-stable
+
 
 # --------------------------------------------------
 # Multimedia
