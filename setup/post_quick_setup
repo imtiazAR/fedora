@@ -235,6 +235,11 @@ $SUDO dnf upgrade -y --refresh
 echo
 echo
 
+#Mandatory Apps
+
+echo "Installing mandatory apps."
+echo
+
 $SUDO dnf install -y gnome-extensions-app
 echo
 echo
