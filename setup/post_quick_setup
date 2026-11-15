@@ -334,14 +334,14 @@ gsettings set org.gnome.desktop.privacy disable-camera true
 gsettings set org.gnome.desktop.privacy report-technical-problems false
 
 # Nautilus
-gsettings set org.gnome.nautilus.preferences click-policy "'double'"
 gsettings set org.gnome.nautilus.preferences default-folder-viewer "'list-view'"
 gsettings set org.gnome.nautilus.preferences show-create-link true
-gsettings set org.gnome.nautilus.preferences show-delete-permanently true
-gsettings set org.gnome.nautilus.preferences date-time-format "'detailed'"
+gsettings set org.gnome.nautilus.preferences show-hidden-files true
+
+        #Sort Folders First
+gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
 
 gsettings set org.gnome.nautilus.list-view use-tree-view true
-gsettings set org.gnome.nautilus.icon-view default-zoom-level "'extra-large'"
 
 # Calendar
 gsettings set org.gnome.desktop.calendar show-weekdate true
@@ -350,7 +350,7 @@ gsettings set org.gnome.desktop.calendar show-weekdate true
 gsettings set org.gnome.desktop.sound allow-volume-above-100-percent true
 gsettings set org.gnome.desktop.sound event-sounds true
 
-
+,
 # Screenshot Shortcuts
 gsettings set org.gnome.shell.keybindings screenshot "['Print']"
 gsettings set org.gnome.shell.keybindings screenshot-window "['<Alt>s']"
