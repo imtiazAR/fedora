@@ -312,7 +312,9 @@ gsettings set org.gnome.desktop.wm.keybindings switch-input-source-backward \
     "['<Shift><Alt>space']"
 
 # Window
-gsettings set org.gnome.desktop.wm.preferences auto-raise true
+# Window Focus
+gsettings set org.gnome.desktop.wm.preferences focus-mode 'sloppy'
+# Titlebar Buttons
 gsettings set org.gnome.desktop.wm.preferences button-layout \
     "'appmenu:minimize,maximize,close'"
 
@@ -322,15 +324,10 @@ gsettings set org.gnome.desktop.wm.preferences button-layout \
 gsettings set org.gnome.desktop.peripherals.keyboard numlock-state true
 
 # Night Light
-gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
-gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-automatic true
-gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-from 5.0
-gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-to 17.0
 gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 5000
 
 # Privacy
 gsettings set org.gnome.desktop.privacy disable-camera true
-gsettings set org.gnome.desktop.privacy report-technical-problems false
 
 # Nautilus
 gsettings set org.gnome.nautilus.preferences default-folder-viewer "'list-view'"
